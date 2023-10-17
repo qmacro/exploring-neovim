@@ -3,9 +3,9 @@ services:
   shell:
     container_name: neovim
     platform: linux/amd64
-    image: neovim
+    build: .
+    image: exploring-neovim
     stdin_open: true
     tty: true
     volumes:
-    - ./homedir/.local:/root/.local
     - ./homedir/.config:/root/.config
