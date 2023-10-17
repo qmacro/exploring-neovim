@@ -1,0 +1,2 @@
+require("qmacro")
+print("hello")
