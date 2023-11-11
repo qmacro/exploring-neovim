@@ -42,15 +42,13 @@ RUN cd $SETUPDIR \
     | tar -xzf - \
     && cd "tmux-$TMUXVER" && ./configure && make && make install
 
-# Neovim config
-RUN cd $SETUPDIR \
-    && git clone https://github.com/qmacro/dotfiles \
-    && cp -a dotfiles/config/nvim/ $CONFDIR
+# Basic Neovim config & setup
+COPY config/nvim $CONFDIR/nvim
+RUN nvim --headless +Lazy +qa
 
-# Tmux config, including plugins
-RUN mkdir $CONFDIR/tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-COPY tmux.conf $CONFDIR/tmux/
+# Basic Tmux config & setup
+RUN git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+COPY config/tmux/tmux.conf $CONFDIR/tmux/
 RUN $CONFDIR/tmux/plugins/tpm/bin/install_plugins
 
 # Sensible CLI
