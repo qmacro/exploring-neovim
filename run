@@ -7,5 +7,5 @@ docker run \
     --name test \
     -i \
     -t \
-    neovim-tmux
+    neovim-tmux-main
 
