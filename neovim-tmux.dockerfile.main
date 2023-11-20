@@ -1,0 +1,14 @@
+FROM --platform=linux/amd64 neovim-tmux-base:latest
+
+# Sample files
+COPY samples ${HOMEDIR}
+
+# Focus status
+RUN echo 'Tmux and Neovim configuration' > /root/.focus-status
+
+# Start up Neovim to have treesitter parsers and typescript-language-server installed
+RUN nvim --headless -c ":MasonInstall typescript-language-server" -c "qa"
+
+# Off we go
+WORKDIR /root
+CMD ["bash"]
