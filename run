@@ -7,5 +7,5 @@ docker run \
     --name test \
     -i \
     -t \
-    neovim-tmux-main
+    "${1:-neovim-tmux-explorations-base}"
 
