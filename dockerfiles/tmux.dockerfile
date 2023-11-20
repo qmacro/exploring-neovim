@@ -9,3 +9,4 @@ ARG CONFDIR=${HOMEDIR}/.config
 RUN git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 COPY config/tmux/tmux.conf $CONFDIR/tmux/
 RUN $CONFDIR/tmux/plugins/tpm/bin/install_plugins
+RUN echo 'Exploring tmux and neovim configuration' > $HOMEDIR/.focus-status

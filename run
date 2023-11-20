@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-docker rm test
 docker run \
     --platform linux/amd64 \
     --volume ~/work:/root/work \
     --name test \
+    --rm \
     -i \
     -t \
-    "${1:-neovim-tmux-explorations-base}"
+    "${1:?Specify image name}"
 
