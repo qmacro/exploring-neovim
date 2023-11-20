@@ -8,7 +8,6 @@ vim.defer_fn(function()
             "vim",
             "vimdoc",
             "query",
-            "javascript",
         },
 
         -- Install parsers synchronously (only applied to `ensure_installed`)

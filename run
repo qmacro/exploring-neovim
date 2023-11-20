@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+docker rm test
 docker run \
     --platform linux/amd64 \
     --volume ~/work:/root/work \
+    --name test \
     -i \
     -t \
     neovim-tmux

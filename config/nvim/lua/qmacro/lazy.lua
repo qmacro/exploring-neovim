@@ -31,7 +31,7 @@ require('lazy').setup({
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
 
-    -- LSP support
+    -- LSP support and other linters and formatters
     {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v3.x',
@@ -43,6 +43,10 @@ require('lazy').setup({
             'hrsh7th/cmp-nvim-lsp'
         }
     },
+    {
+        'mfussenegger/nvim-lint'
+    },
+
 
     -- Completion
     { 'hrsh7th/cmp-buffer' },

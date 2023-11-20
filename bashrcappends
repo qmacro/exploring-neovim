@@ -4,4 +4,4 @@ alias v=nvim
 alias vi=nvim
 alias vim=nvim
 export EDITOR=nvim
-
+alias tmux='tmux -u'
