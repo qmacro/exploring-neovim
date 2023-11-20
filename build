@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+docker build \
+    --platform linux/amd64 \
+    -f neovim-tmux.dockerfile \
+    -t neovim-tmux \
+    .
+

@@ -1,3 +1,7 @@
 set -o vi
 bind -x '"\C-l": clear'
+alias v=nvim
+alias vi=nvim
+alias vim=nvim
+export EDITOR=nvim
 

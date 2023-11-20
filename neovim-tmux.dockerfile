@@ -9,6 +9,7 @@ RUN apt-get install -y \
     gcc \
     golang \
     libevent-dev \
+    lf \
     ncurses-dev \
     nodejs \
     npm \
@@ -55,8 +56,15 @@ RUN $CONFDIR/tmux/plugins/tpm/bin/install_plugins
 COPY bashrcappends ${SETUPDIR}
 RUN cat ${SETUPDIR}/bashrcappends >> ${HOMEDIR}/.bashrc
 
+# Sample files
+COPY samples ${HOMEDIR}
+
+# Other config
+COPY config/lf $CONFDIR/lf
+
 # Tidy up
 RUN rm -rf ${SETUPDIR}
 
 # Off we go
+WORKDIR /root
 CMD ["bash"]

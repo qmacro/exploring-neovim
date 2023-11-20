@@ -14,6 +14,10 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
 
+    -- Look and feel
+    { 'Mofiqul/dracula.nvim' },
+    { 'nvim-lualine/lualine.nvim' },
+
     -- Treesitter
     {
         'nvim-treesitter/nvim-treesitter',
