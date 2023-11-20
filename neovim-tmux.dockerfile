@@ -14,6 +14,7 @@ RUN apt-get install -y \
     nodejs \
     npm \
     fd-find \
+    shellcheck \
     unzip
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
