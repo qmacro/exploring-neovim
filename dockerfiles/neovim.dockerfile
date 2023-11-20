@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 neovim-tmux-explorations-base:latest
+FROM --platform=linux/amd64 neovim-tmux-explorations-tmux:latest
 
 ARG DEST=/usr/local/bin
 ARG SETUPDIR=/tmp/setup
