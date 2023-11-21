@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+declare image="${1:-neovim-tmux-explorations-neovim}"
 docker run \
     --platform linux/amd64 \
     --volume ~/work:/root/work \
@@ -7,5 +8,5 @@ docker run \
     --rm \
     -i \
     -t \
-    "${1:?Specify image name}"
+    "$image"
 
