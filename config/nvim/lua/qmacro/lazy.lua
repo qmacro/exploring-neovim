@@ -38,7 +38,8 @@ require('lazy').setup({
         lazy = true,
         config = false
     },
-    { 'neovim/nvim-lspconfig',
+    {
+        'neovim/nvim-lspconfig',
         dependencies = {
             'hrsh7th/cmp-nvim-lsp'
         }
@@ -63,13 +64,21 @@ require('lazy').setup({
     { 'hrsh7th/cmp-nvim-lua' },
     { 'hrsh7th/nvim-cmp' },
 
---    { 'L3MON4D3/LuaSnip' },
---    { 'saadparwaiz1/cmp_luasnip' },
-
     { 'hrsh7th/cmp-vsnip' },
     { 'hrsh7th/vim-vsnip' },
     { 'rafamadriz/friendly-snippets' },
 
     { 'onsails/lspkind.nvim' },
+
+    -- Utils
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        init = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end,
+        opts = {}
+    }
 
 })
