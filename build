@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+declare image="${1:-neovim}"
+
 docker build \
     --platform linux/amd64 \
-    -f neovim-tmux.dockerfile.main \
-    -t neovim-tmux-main \
+    -f "dockerfiles/${image}.dockerfile" \
+    -t "neovim-tmux-explorations-${image}" \
     .
 
