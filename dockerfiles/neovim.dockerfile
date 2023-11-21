@@ -9,3 +9,5 @@ ARG CONFDIR=${HOMEDIR}/.config
 COPY config/nvim $CONFDIR/nvim
 RUN nvim --headless -c "Lazy" -c "qa" \
   && nvim --headless -c "MasonInstall typescript-language-server" -c "qa"
+
+WORKDIR $HOMEDIR
