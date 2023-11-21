@@ -33,7 +33,7 @@ cmp.setup({
     sources = cmp.config.sources({
         { name = 'nvim_lua' },
     }, {
-        { name = 'vsnip' },
+        -- { name = 'vsnip' },
         { name = 'path' },
         { name = 'buffer', keyword_length = 5 },
     }),
