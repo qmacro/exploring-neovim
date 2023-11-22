@@ -10,4 +10,7 @@ COPY config/nvim $CONFDIR/nvim
 RUN nvim --headless -c "Lazy" -c "qa" \
   && nvim --headless -c "MasonInstall typescript-language-server" -c "qa"
 
+# Sample files
+COPY samples ${HOMEDIR}
+
 WORKDIR $HOMEDIR

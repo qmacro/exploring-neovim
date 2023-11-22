@@ -46,8 +46,5 @@ RUN cd $SETUPDIR \
 COPY bashrcappends ${SETUPDIR}
 RUN cat ${SETUPDIR}/bashrcappends >> ${HOMEDIR}/.bashrc
 
-# Sample files
-COPY samples ${HOMEDIR}
-
 # Other config
 COPY config/lf $CONFDIR/lf
