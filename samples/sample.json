@@ -1,0 +1,506 @@
+{
+  "@odata.context": "https://services.odata.org/V4/Northwind/Northwind.svc/$metadata#Summary_of_Sales_by_Years",
+  "value": [
+    {
+      "ShippedDate": "1996-07-16T00:00:00Z",
+      "OrderID": 10248,
+      "Subtotal": 440.0000
+    },
+    {
+      "ShippedDate": "1996-07-10T00:00:00Z",
+      "OrderID": 10249,
+      "Subtotal": 1863.4000
+    },
+    {
+      "ShippedDate": "1996-07-12T00:00:00Z",
+      "OrderID": 10250,
+      "Subtotal": 1552.6000
+    },
+    {
+      "ShippedDate": "1996-07-15T00:00:00Z",
+      "OrderID": 10251,
+      "Subtotal": 654.0600
+    },
+    {
+      "ShippedDate": "1996-07-11T00:00:00Z",
+      "OrderID": 10252,
+      "Subtotal": 3597.9000
+    },
+    {
+      "ShippedDate": "1996-07-16T00:00:00Z",
+      "OrderID": 10253,
+      "Subtotal": 1444.8000
+    },
+    {
+      "ShippedDate": "1996-07-23T00:00:00Z",
+      "OrderID": 10254,
+      "Subtotal": 556.6200
+    },
+    {
+      "ShippedDate": "1996-07-15T00:00:00Z",
+      "OrderID": 10255,
+      "Subtotal": 2490.5000
+    },
+    {
+      "ShippedDate": "1996-07-17T00:00:00Z",
+      "OrderID": 10256,
+      "Subtotal": 517.8000
+    },
+    {
+      "ShippedDate": "1996-07-22T00:00:00Z",
+      "OrderID": 10257,
+      "Subtotal": 1119.9000
+    },
+    {
+      "ShippedDate": "1996-07-23T00:00:00Z",
+      "OrderID": 10258,
+      "Subtotal": 1614.8800
+    },
+    {
+      "ShippedDate": "1996-07-25T00:00:00Z",
+      "OrderID": 10259,
+      "Subtotal": 100.8000
+    },
+    {
+      "ShippedDate": "1996-07-29T00:00:00Z",
+      "OrderID": 10260,
+      "Subtotal": 1504.6500
+    },
+    {
+      "ShippedDate": "1996-07-30T00:00:00Z",
+      "OrderID": 10261,
+      "Subtotal": 448.0000
+    },
+    {
+      "ShippedDate": "1996-07-25T00:00:00Z",
+      "OrderID": 10262,
+      "Subtotal": 584.0000
+    },
+    {
+      "ShippedDate": "1996-07-31T00:00:00Z",
+      "OrderID": 10263,
+      "Subtotal": 1873.8000
+    },
+    {
+      "ShippedDate": "1996-08-23T00:00:00Z",
+      "OrderID": 10264,
+      "Subtotal": 695.6300
+    },
+    {
+      "ShippedDate": "1996-08-12T00:00:00Z",
+      "OrderID": 10265,
+      "Subtotal": 1176.0000
+    },
+    {
+      "ShippedDate": "1996-07-31T00:00:00Z",
+      "OrderID": 10266,
+      "Subtotal": 346.5600
+    },
+    {
+      "ShippedDate": "1996-08-06T00:00:00Z",
+      "OrderID": 10267,
+      "Subtotal": 3536.6000
+    },
+    {
+      "ShippedDate": "1996-08-02T00:00:00Z",
+      "OrderID": 10268,
+      "Subtotal": 1101.2000
+    },
+    {
+      "ShippedDate": "1996-08-09T00:00:00Z",
+      "OrderID": 10269,
+      "Subtotal": 642.2000
+    },
+    {
+      "ShippedDate": "1996-08-02T00:00:00Z",
+      "OrderID": 10270,
+      "Subtotal": 1376.0000
+    },
+    {
+      "ShippedDate": "1996-08-30T00:00:00Z",
+      "OrderID": 10271,
+      "Subtotal": 48.0000
+    },
+    {
+      "ShippedDate": "1996-08-06T00:00:00Z",
+      "OrderID": 10272,
+      "Subtotal": 1456.0000
+    },
+    {
+      "ShippedDate": "1996-08-12T00:00:00Z",
+      "OrderID": 10273,
+      "Subtotal": 2037.2800
+    },
+    {
+      "ShippedDate": "1996-08-16T00:00:00Z",
+      "OrderID": 10274,
+      "Subtotal": 538.6000
+    },
+    {
+      "ShippedDate": "1996-08-09T00:00:00Z",
+      "OrderID": 10275,
+      "Subtotal": 291.8400
+    },
+    {
+      "ShippedDate": "1996-08-14T00:00:00Z",
+      "OrderID": 10276,
+      "Subtotal": 420.0000
+    },
+    {
+      "ShippedDate": "1996-08-13T00:00:00Z",
+      "OrderID": 10277,
+      "Subtotal": 1200.8000
+    },
+    {
+      "ShippedDate": "1996-08-16T00:00:00Z",
+      "OrderID": 10278,
+      "Subtotal": 1488.8000
+    },
+    {
+      "ShippedDate": "1996-08-16T00:00:00Z",
+      "OrderID": 10279,
+      "Subtotal": 351.0000
+    },
+    {
+      "ShippedDate": "1996-09-12T00:00:00Z",
+      "OrderID": 10280,
+      "Subtotal": 613.2000
+    },
+    {
+      "ShippedDate": "1996-08-21T00:00:00Z",
+      "OrderID": 10281,
+      "Subtotal": 86.5000
+    },
+    {
+      "ShippedDate": "1996-08-21T00:00:00Z",
+      "OrderID": 10282,
+      "Subtotal": 155.4000
+    },
+    {
+      "ShippedDate": "1996-08-23T00:00:00Z",
+      "OrderID": 10283,
+      "Subtotal": 1414.8000
+    },
+    {
+      "ShippedDate": "1996-08-27T00:00:00Z",
+      "OrderID": 10284,
+      "Subtotal": 1170.3800
+    },
+    {
+      "ShippedDate": "1996-08-26T00:00:00Z",
+      "OrderID": 10285,
+      "Subtotal": 1743.3600
+    },
+    {
+      "ShippedDate": "1996-08-30T00:00:00Z",
+      "OrderID": 10286,
+      "Subtotal": 3016.0000
+    },
+    {
+      "ShippedDate": "1996-08-28T00:00:00Z",
+      "OrderID": 10287,
+      "Subtotal": 819.0000
+    },
+    {
+      "ShippedDate": "1996-09-03T00:00:00Z",
+      "OrderID": 10288,
+      "Subtotal": 80.1000
+    },
+    {
+      "ShippedDate": "1996-08-28T00:00:00Z",
+      "OrderID": 10289,
+      "Subtotal": 479.4000
+    },
+    {
+      "ShippedDate": "1996-09-03T00:00:00Z",
+      "OrderID": 10290,
+      "Subtotal": 2169.0000
+    },
+    {
+      "ShippedDate": "1996-09-04T00:00:00Z",
+      "OrderID": 10291,
+      "Subtotal": 497.5200
+    },
+    {
+      "ShippedDate": "1996-09-02T00:00:00Z",
+      "OrderID": 10292,
+      "Subtotal": 1296.0000
+    },
+    {
+      "ShippedDate": "1996-09-11T00:00:00Z",
+      "OrderID": 10293,
+      "Subtotal": 848.7000
+    },
+    {
+      "ShippedDate": "1996-09-05T00:00:00Z",
+      "OrderID": 10294,
+      "Subtotal": 1887.6000
+    },
+    {
+      "ShippedDate": "1996-09-10T00:00:00Z",
+      "OrderID": 10295,
+      "Subtotal": 121.6000
+    },
+    {
+      "ShippedDate": "1996-09-11T00:00:00Z",
+      "OrderID": 10296,
+      "Subtotal": 1050.6000
+    },
+    {
+      "ShippedDate": "1996-09-10T00:00:00Z",
+      "OrderID": 10297,
+      "Subtotal": 1420.0000
+    },
+    {
+      "ShippedDate": "1996-09-11T00:00:00Z",
+      "OrderID": 10298,
+      "Subtotal": 2645.0000
+    },
+    {
+      "ShippedDate": "1996-09-13T00:00:00Z",
+      "OrderID": 10299,
+      "Subtotal": 349.5000
+    },
+    {
+      "ShippedDate": "1996-09-18T00:00:00Z",
+      "OrderID": 10300,
+      "Subtotal": 608.0000
+    },
+    {
+      "ShippedDate": "1996-09-17T00:00:00Z",
+      "OrderID": 10301,
+      "Subtotal": 755.0000
+    },
+    {
+      "ShippedDate": "1996-10-09T00:00:00Z",
+      "OrderID": 10302,
+      "Subtotal": 2708.8000
+    },
+    {
+      "ShippedDate": "1996-09-18T00:00:00Z",
+      "OrderID": 10303,
+      "Subtotal": 1117.8000
+    },
+    {
+      "ShippedDate": "1996-09-17T00:00:00Z",
+      "OrderID": 10304,
+      "Subtotal": 954.4000
+    },
+    {
+      "ShippedDate": "1996-10-09T00:00:00Z",
+      "OrderID": 10305,
+      "Subtotal": 3741.3000
+    },
+    {
+      "ShippedDate": "1996-09-23T00:00:00Z",
+      "OrderID": 10306,
+      "Subtotal": 498.5000
+    },
+    {
+      "ShippedDate": "1996-09-25T00:00:00Z",
+      "OrderID": 10307,
+      "Subtotal": 424.0000
+    },
+    {
+      "ShippedDate": "1996-09-24T00:00:00Z",
+      "OrderID": 10308,
+      "Subtotal": 88.8000
+    },
+    {
+      "ShippedDate": "1996-10-23T00:00:00Z",
+      "OrderID": 10309,
+      "Subtotal": 1762.0000
+    },
+    {
+      "ShippedDate": "1996-09-27T00:00:00Z",
+      "OrderID": 10310,
+      "Subtotal": 336.0000
+    },
+    {
+      "ShippedDate": "1996-09-26T00:00:00Z",
+      "OrderID": 10311,
+      "Subtotal": 268.8000
+    },
+    {
+      "ShippedDate": "1996-10-03T00:00:00Z",
+      "OrderID": 10312,
+      "Subtotal": 1614.8000
+    },
+    {
+      "ShippedDate": "1996-10-04T00:00:00Z",
+      "OrderID": 10313,
+      "Subtotal": 182.4000
+    },
+    {
+      "ShippedDate": "1996-10-04T00:00:00Z",
+      "OrderID": 10314,
+      "Subtotal": 2094.3000
+    },
+    {
+      "ShippedDate": "1996-10-03T00:00:00Z",
+      "OrderID": 10315,
+      "Subtotal": 516.8000
+    },
+    {
+      "ShippedDate": "1996-10-08T00:00:00Z",
+      "OrderID": 10316,
+      "Subtotal": 2835.0000
+    },
+    {
+      "ShippedDate": "1996-10-10T00:00:00Z",
+      "OrderID": 10317,
+      "Subtotal": 288.0000
+    },
+    {
+      "ShippedDate": "1996-10-04T00:00:00Z",
+      "OrderID": 10318,
+      "Subtotal": 240.4000
+    },
+    {
+      "ShippedDate": "1996-10-11T00:00:00Z",
+      "OrderID": 10319,
+      "Subtotal": 1191.2000
+    },
+    {
+      "ShippedDate": "1996-10-18T00:00:00Z",
+      "OrderID": 10320,
+      "Subtotal": 516.0000
+    },
+    {
+      "ShippedDate": "1996-10-11T00:00:00Z",
+      "OrderID": 10321,
+      "Subtotal": 144.0000
+    },
+    {
+      "ShippedDate": "1996-10-23T00:00:00Z",
+      "OrderID": 10322,
+      "Subtotal": 112.0000
+    },
+    {
+      "ShippedDate": "1996-10-14T00:00:00Z",
+      "OrderID": 10323,
+      "Subtotal": 164.4000
+    },
+    {
+      "ShippedDate": "1996-10-10T00:00:00Z",
+      "OrderID": 10324,
+      "Subtotal": 5275.7200
+    },
+    {
+      "ShippedDate": "1996-10-14T00:00:00Z",
+      "OrderID": 10325,
+      "Subtotal": 1497.0000
+    },
+    {
+      "ShippedDate": "1996-10-14T00:00:00Z",
+      "OrderID": 10326,
+      "Subtotal": 982.0000
+    },
+    {
+      "ShippedDate": "1996-10-14T00:00:00Z",
+      "OrderID": 10327,
+      "Subtotal": 1810.0000
+    },
+    {
+      "ShippedDate": "1996-10-17T00:00:00Z",
+      "OrderID": 10328,
+      "Subtotal": 1168.0000
+    },
+    {
+      "ShippedDate": "1996-10-23T00:00:00Z",
+      "OrderID": 10329,
+      "Subtotal": 4578.4300
+    },
+    {
+      "ShippedDate": "1996-10-28T00:00:00Z",
+      "OrderID": 10330,
+      "Subtotal": 1649.0000
+    },
+    {
+      "ShippedDate": "1996-10-21T00:00:00Z",
+      "OrderID": 10331,
+      "Subtotal": 88.5000
+    },
+    {
+      "ShippedDate": "1996-10-21T00:00:00Z",
+      "OrderID": 10332,
+      "Subtotal": 1786.8800
+    },
+    {
+      "ShippedDate": "1996-10-25T00:00:00Z",
+      "OrderID": 10333,
+      "Subtotal": 877.2000
+    },
+    {
+      "ShippedDate": "1996-10-28T00:00:00Z",
+      "OrderID": 10334,
+      "Subtotal": 144.8000
+    },
+    {
+      "ShippedDate": "1996-10-24T00:00:00Z",
+      "OrderID": 10335,
+      "Subtotal": 2036.1600
+    },
+    {
+      "ShippedDate": "1996-10-25T00:00:00Z",
+      "OrderID": 10336,
+      "Subtotal": 285.1200
+    },
+    {
+      "ShippedDate": "1996-10-29T00:00:00Z",
+      "OrderID": 10337,
+      "Subtotal": 2467.0000
+    },
+    {
+      "ShippedDate": "1996-10-29T00:00:00Z",
+      "OrderID": 10338,
+      "Subtotal": 934.5000
+    },
+    {
+      "ShippedDate": "1996-11-04T00:00:00Z",
+      "OrderID": 10339,
+      "Subtotal": 3354.0000
+    },
+    {
+      "ShippedDate": "1996-11-08T00:00:00Z",
+      "OrderID": 10340,
+      "Subtotal": 2436.1800
+    },
+    {
+      "ShippedDate": "1996-11-05T00:00:00Z",
+      "OrderID": 10341,
+      "Subtotal": 352.6000
+    },
+    {
+      "ShippedDate": "1996-11-04T00:00:00Z",
+      "OrderID": 10342,
+      "Subtotal": 1840.6400
+    },
+    {
+      "ShippedDate": "1996-11-06T00:00:00Z",
+      "OrderID": 10343,
+      "Subtotal": 1584.0000
+    },
+    {
+      "ShippedDate": "1996-11-05T00:00:00Z",
+      "OrderID": 10344,
+      "Subtotal": 2296.0000
+    },
+    {
+      "ShippedDate": "1996-11-11T00:00:00Z",
+      "OrderID": 10345,
+      "Subtotal": 2924.8000
+    },
+    {
+      "ShippedDate": "1996-11-08T00:00:00Z",
+      "OrderID": 10346,
+      "Subtotal": 1618.8800
+    },
+    {
+      "ShippedDate": "1996-11-08T00:00:00Z",
+      "OrderID": 10347,
+      "Subtotal": 814.4200
+    }
+  ],
+  "@odata.nextLink": "../../../v4/northwind/northwind.svc/Summary_of_Sales_by_Years?$skiptoken=10347"
+}
