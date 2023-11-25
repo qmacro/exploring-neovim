@@ -7,8 +7,9 @@ ARG CONFDIR=${HOMEDIR}/.config
 
 # Basic Neovim config & setup
 COPY config/nvim $CONFDIR/nvim
-RUN nvim --headless -c "Lazy" -c "qa" \
-  && nvim --headless -c "MasonInstall typescript-language-server" -c "qa"
+RUN nvim --headless -c "Lazy" -c "qa"
+RUN nvim --headless -c "TSInstall javascript json jq" -c "qa"
+RUN nvim --headless -c "MasonInstall typescript-language-server jq-lsp json-lsp" -c "qa"
 
 # Sample files
 COPY samples ${HOMEDIR}
