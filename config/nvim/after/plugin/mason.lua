@@ -5,6 +5,7 @@ require('mason-lspconfig').setup({
     ensure_installed = {
         'jqls',
         'jsonls',
+        'lua_ls',
         'tsserver',
     },
     handlers = {
