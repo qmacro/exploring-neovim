@@ -4,8 +4,8 @@ declare image="${1:-neovim-tmux-explorations-neovim}"
 docker run \
     --platform linux/amd64 \
     --volume ~/work:/root/work \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
     --name test \
-    --rm \
     -i \
     -t \
     "$image"
