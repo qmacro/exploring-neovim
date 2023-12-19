@@ -1,5 +1,7 @@
 FROM --platform=linux/amd64 debian:latest
 
+ARG USERNAME=user
+
 RUN apt-get update
 RUN apt-get install -y \
     apt-transport-https \
@@ -18,30 +20,32 @@ RUN apt-get install -y \
     shellcheck \
     unzip
 
+# Ensure keyrings dir is there, for apt-based Docker and Node.js installs
+RUN mkdir -p /etc/apt/keyrings
+
+# Install docker CLI and Node.js
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg \
+    | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+  && echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+    | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 # Specific install of Node.js 20 (cds-lsp requires >=18.15.0).
 # See https://github.com/nodesource/distributions
 ARG NODE_MAJOR=20
-RUN mkdir -p /etc/apt/keyrings \
-  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
   | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
   && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" \
-  | tee /etc/apt/sources.list.d/nodesource.list \
-  && apt-get update \
-  && apt-get install -y nodejs
+  | tee /etc/apt/sources.list.d/nodesource.list
+
+RUN apt-get update
+
+RUN apt-get install -y docker-ce-cli nodejs
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN touch /tmp/decache
-
-ARG USERNAME=user
-RUN adduser \
-  --quiet \
-  --disabled-password \
-  --shell /bin/bash \
-  --home /home/$USERNAME \
-  --gecos "Dev User" \
-  $USERNAME
 
 # Definitions & basic setup
 ARG DEST=/usr/local/bin
@@ -49,9 +53,24 @@ ARG SETUPDIR=/tmp/setup
 ARG HOMEDIR=/home/${USERNAME}
 ARG CONFDIR=${HOMEDIR}/.config
 ARG NVIMCONF=${CONFDIR}/nvim
-RUN mkdir $CONFDIR $SETUPDIR
+
+RUN adduser \
+  --quiet \
+  --disabled-password \
+  --shell /bin/bash \
+  --home $HOMEDIR \
+  --gecos "Dev User" \
+  $USERNAME
+
+# Ensure I can run docker and connect from within a container to the Docker
+# engine, as non-root user.
+RUN groupadd docker && usermod -aG docker $USERNAME
+RUN touch /var/run/docker.sock && chown $USERNAME:$USERNAME /var/run/docker.sock
+
+RUN mkdir $SETUPDIR $CONFDIR ${CONFDIR}/nvim
 
 RUN chmod 777 $SETUPDIR
+RUN chown -R $USERNAME:$USERNAME $CONFDIR
 
 # Install Ripgrep
 RUN cd $SETUPDIR \
@@ -70,9 +89,6 @@ RUN cd $SETUPDIR \
     | tar -xzf - \
     && cd "tmux-$TMUXVER" && ./configure && make && make install
 
-RUN chown $USERNAME:$USERNAME $CONFDIR
-USER $USERNAME
-
 # Sensible CLI
 COPY bashrcappends ${SETUPDIR}
 RUN cat ${SETUPDIR}/bashrcappends >> ${HOMEDIR}/.bashrc
@@ -80,29 +96,28 @@ RUN cat ${SETUPDIR}/bashrcappends >> ${HOMEDIR}/.bashrc
 # Other config
 COPY config/lf $CONFDIR/lf
 
+# CAP installs
+RUN npm install --global @sap/cds-dk @sap/cds-lsp
+
+# Switch to container user for the following operations
+USER $USERNAME
+
 # Basic Tmux config & setup
 RUN git clone https://github.com/tmux-plugins/tpm ${CONFDIR}/tmux/plugins/tpm
 COPY config/tmux/tmux.conf $CONFDIR/tmux/
 RUN $CONFDIR/tmux/plugins/tpm/bin/install_plugins
 RUN echo 'Exploring tmux and neovim configuration' > $HOMEDIR/.focus-status
 
-# CAP installs
-RUN npm config set prefix $HOMEDIR/.npm-global
-RUN npm install --global @sap/cds-dk @sap/cds-lsp
-
-## Sample files
-#COPY samples ${HOMEDIR}
-#RUN cd ${HOMEDIR} && cds init --add sample bookshop
-
 # Basic Neovim config & setup
-COPY config/nvim ${NVIMCONF}
+COPY config/nvim ${CONFDIR}/nvim
 RUN nvim --headless -c "Lazy" -c "qa"
 RUN nvim --headless -c "TSInstall javascript json jq" -c "qa"
 RUN nvim --headless -c "MasonInstall jq-lsp json-lsp lua-language-server typescript-language-server" -c "qa"
 
-# TODO
+# TODO sort this out
 USER root
-RUN chown $USERNAME $NVIMCONF
+RUN chown -R $USERNAME:$USERNAME $HOMEDIR
+RUN rm -rf $HOMEDIR/go/
 USER $USERNAME
 
 # Install treesitter query files for CDS
@@ -112,29 +127,10 @@ RUN mkdir -p ${SETUPDIR} \
   && mkdir -p ${NVIMCONF}/queries/cds/ \
   && cp tree-sitter-cds/nvim/*.scm ${NVIMCONF}/queries/cds/
 
-# Clean up
-# TODO
-USER root
-RUN rm -rf $SETUPDIR
+## Sample files
+COPY samples ${HOMEDIR}
+#RUN cd ${HOMEDIR} && cds init --add sample bookshop
 
-# Install docker CLI
-# TODO: move to top later
-RUN install -m 0755 -d /etc/apt/keyrings \
-  && curl -fsSL https://download.docker.com/linux/debian/gpg \
-    | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
-  && chmod a+r /etc/apt/keyrings/docker.gpg
-
-RUN echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-    | tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-RUN apt-get update
-RUN apt-get install -y docker-ce-cli
-RUN groupadd docker && usermod -aG docker $USERNAME
-RUN touch /var/run/docker.sock && chown $USERNAME:$USERNAME /var/run/docker.sock
-  
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
