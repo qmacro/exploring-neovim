@@ -1,6 +1,9 @@
-FROM --platform=linux/amd64 debian:latest
+# ---------------------------------------------------------------------
+FROM --platform=linux/amd64 debian:latest as base
 
 ARG USERNAME=user
+ARG DEST=/usr/local/bin
+ARG SETUPDIR=/tmp/setup
 
 RUN apt-get update
 RUN apt-get install -y \
@@ -41,99 +44,133 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
   | tee /etc/apt/sources.list.d/nodesource.list
 
 RUN apt-get update
-
 RUN apt-get install -y docker-ce-cli nodejs
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# ---------------------------------------------------------------------
+FROM base as extra
 
-# Definitions & basic setup
-ARG DEST=/usr/local/bin
-ARG SETUPDIR=/tmp/setup
-ARG HOMEDIR=/home/${USERNAME}
-ARG CONFDIR=${HOMEDIR}/.config
-ARG NVIMCONF=${CONFDIR}/nvim
+RUN mkdir $SETUPDIR && chmod 777 $SETUPDIR
 
-RUN adduser \
-  --quiet \
-  --disabled-password \
-  --shell /bin/bash \
-  --home $HOMEDIR \
-  --gecos "Dev User" \
-  $USERNAME
-
-# Ensure I can run docker and connect from within a container to the Docker
-# engine, as non-root user.
-RUN groupadd docker && usermod -aG docker $USERNAME
-RUN touch /var/run/docker.sock && chown $USERNAME:$USERNAME /var/run/docker.sock
-
-RUN mkdir $SETUPDIR $CONFDIR ${CONFDIR}/nvim
-
-RUN chmod 777 $SETUPDIR
-RUN chown -R $USERNAME:$USERNAME $CONFDIR
-
-# Install Ripgrep
+ARG GHVER=2.40.1
 RUN cd $SETUPDIR \
-  && ls -l ..; touch TEST \
-  && curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb \
-  && dpkg -i ripgrep_13.0.0_amd64.deb
+  && curl -LO "https://github.com/cli/cli/releases/download/v${GHVER}/gh_${GHVER}_linux_amd64.deb" \
+  && dpkg -i "./gh_${GHVER}_linux_amd64.deb"
 
-# Install Neovim
-RUN curl -L https://github.com/neovim/neovim/releases/download/v0.9.4/nvim-linux64.tar.gz \
+ARG GLOWVER=1.5.1
+RUN curl -sLO "https://github.com/charmbracelet/glow/releases/download/v${GLOWVER}/glow_${GLOWVER}_amd64.deb" \
+  && dpkg -i "./glow_${GLOWVER}_amd64.deb"
+
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+ARG JQVER=1.7
+RUN curl \
+    --silent \
+    --location \
+    --output $DEST/jq \
+    --url "https://github.com/jqlang/jq/releases/download/jq-${JQVER}/jq-linux-amd64" \
+    && chmod +x $DEST/jq
+
+ARG IJQVER=0.4.1
+RUN curl \
+    --silent \
+    --location \
+    --url "https://git.sr.ht/~gpanders/ijq/refs/download/v$IJQVER/ijq-$IJQVER-linux-amd64.tar.gz" \
+    | tar \
+      --extract \
+      --gunzip \
+      --file - \
+      --directory $DEST \
+      --strip-components 1 \
+      --wildcards \
+      ijq-$IJQVER/ijq
+
+ARG RIPGREPVER=13.0.0
+RUN cd $SETUPDIR \
+  && curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREPVER}/ripgrep_${RIPGREPVER}_amd64.deb \
+  && dpkg -i ripgrep_${RIPGREPVER}_amd64.deb
+
+ARG NEOVIMVER=0.9.4
+RUN curl -L https://github.com/neovim/neovim/releases/download/v${NEOVIMVER}/nvim-linux64.tar.gz \
   | tar xzf - -C /usr --strip-components 1
 
-# Install Tmux
 ARG TMUXVER=3.3a
 RUN cd $SETUPDIR \
     && curl -fsSL "https://github.com/tmux/tmux/releases/download/$TMUXVER/tmux-$TMUXVER.tar.gz" \
     | tar -xzf - \
     && cd "tmux-$TMUXVER" && ./configure && make && make install
 
-# Sensible CLI
-COPY bashrcappends ${SETUPDIR}
-RUN cat ${SETUPDIR}/bashrcappends >> ${HOMEDIR}/.bashrc
+# ---------------------------------------------------------------------
+FROM extra as usersetup
 
-# Other config
-COPY config/lf $CONFDIR/lf
+# Definitions & basic setup
+ARG HOME=/home/${USERNAME}
+ARG CONFDIR=${HOME}/.config
+ARG NVIMCONF=$HOME/.config/nvim
+
+RUN adduser \
+  --quiet \
+  --disabled-password \
+  --shell /bin/bash \
+  --home $HOME \
+  --gecos "Dev User" \
+  $USERNAME
+
+# Ensure I can run docker and connect from within a container to the Docker engine, as non-root.
+RUN groupadd docker && usermod -aG docker $USERNAME
+RUN touch /var/run/docker.sock && chown $USERNAME:$USERNAME /var/run/docker.sock
+
+RUN mkdir $HOME/.config
+
+RUN chmod 777 $SETUPDIR
+RUN chown -R $USERNAME:$USERNAME $HOME/.config $HOME/.cache/
+
+# ---------------------------------------------------------------------
+FROM usersetup as npminstalls
 
 # CAP installs
-RUN npm install --global @sap/cds-dk @sap/cds-lsp
+RUN \
+  npm install --global @sap/cds-dk @sap/cds-lsp \
+  && chown -R $USERNAME:$USERNAME $HOME/.npm/
+
+# ---------------------------------------------------------------------
+FROM npminstalls as coreconfig
 
 # Switch to container user for the following operations
 USER $USERNAME
 
+# Bring in dotfiles
+RUN git clone https://github.com/qmacro/dotfiles/ $HOME/dotfiles
+
 # Basic Tmux config & setup
-RUN git clone https://github.com/tmux-plugins/tpm ${CONFDIR}/tmux/plugins/tpm
-COPY config/tmux/tmux.conf $CONFDIR/tmux/
-RUN $CONFDIR/tmux/plugins/tpm/bin/install_plugins
-RUN echo 'Exploring tmux and neovim configuration' > $HOMEDIR/.focus-status
+RUN \
+    mkdir -p $HOME/.config/tmux/ \
+ && ln -s $HOME/dotfiles/config/tmux/tmux.conf $HOME/.config/tmux/ \
+ && git clone https://github.com/tmux-plugins/tpm $HOME/.config/tmux/plugins/tpm \
+ && $HOME/.config/tmux/plugins/tpm/bin/install_plugins \
+ && echo 'Devcontainers FTW!' > $HOME/.focus-status
 
 # Basic Neovim config & setup
-COPY config/nvim ${CONFDIR}/nvim
-RUN nvim --headless -c "Lazy" -c "qa"
-RUN nvim --headless -c "TSInstall javascript json jq" -c "qa"
-RUN nvim --headless -c "MasonInstall jq-lsp json-lsp lua-language-server typescript-language-server" -c "qa"
-
-# TODO sort this out
-USER root
-RUN chown -R $USERNAME:$USERNAME $HOMEDIR
-RUN rm -rf $HOMEDIR/go/
-USER $USERNAME
+RUN \
+    ln -s $HOME/dotfiles/config/nvim/ $HOME/.config/ \
+ && nvim --headless -c "Lazy" -c "qa" \
+ && nvim --headless -c "TSInstall javascript json jq" -c "qa" \
+ && nvim --headless -c "MasonInstall jq-lsp json-lsp lua-language-server typescript-language-server" -c "qa" \
+ && chmod -R +w $HOME/go/ && rm -rf $HOME/go/
 
 # Install treesitter query files for CDS
-RUN mkdir -p ${SETUPDIR} \
-  && cd ${SETUPDIR} \
-  && git clone https://github.com/cap-js-community/tree-sitter-cds \
-  && mkdir -p ${NVIMCONF}/queries/cds/ \
-  && cp tree-sitter-cds/nvim/*.scm ${NVIMCONF}/queries/cds/
+RUN \
+    cd ${SETUPDIR} \
+ && git clone https://github.com/cap-js-community/tree-sitter-cds \
+ && mkdir -p $HOME/.config/nvim/queries/cds/ \
+ && cp tree-sitter-cds/nvim/*.scm $HOME/.config/nvim/queries/cds/
 
-## Sample files
-COPY samples ${HOMEDIR}
-#RUN cd ${HOMEDIR} && cds init --add sample bookshop
+# Set up shell configuration
+RUN ln -s -f $HOME/dotfiles/bashrc $HOME/.bashrc
+# ---------------------------------------------------------------------
+FROM coreconfig as finalsetup
 
 USER $USERNAME
 WORKDIR /home/$USERNAME
-
-CMD ["bash"]
 
 CMD ["tmux", "-u"]
