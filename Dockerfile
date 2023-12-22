@@ -12,6 +12,7 @@ RUN apt-get install -y \
     ca-certificates \
     curl \
     fd-find \
+    fzf \
     gcc \
     git \
     gnupg \
@@ -20,7 +21,9 @@ RUN apt-get install -y \
     libevent-dev \
     ncurses-dev \
     npm \
+    pandoc \
     shellcheck \
+    toot \
     unzip
 
 # Ensure keyrings dir is there, for apt-based Docker and Node.js installs
@@ -100,6 +103,14 @@ RUN cd $SETUPDIR \
     | tar -xzf - \
     && cd "tmux-$TMUXVER" && ./configure && make && make install
 
+RUN cd $SETUPDIR \
+    && curl \
+      --remote-name \
+      --location \
+      --url "https://raw.githubusercontent.com/SAP-samples/sap-tech-bytes/2021-09-01-btp-cli/getbtpcli" \
+    && chmod +x getbtpcli \
+    && echo -ne '\n' | ./getbtpcli
+
 # ---------------------------------------------------------------------
 FROM extra as usersetup
 
@@ -116,13 +127,7 @@ RUN adduser \
   --gecos "Dev User" \
   $USERNAME
 
-# Ensure I can run docker and connect from within a container to the Docker engine, as non-root.
-RUN groupadd docker && usermod -aG docker $USERNAME
-RUN touch /var/run/docker.sock && chown $USERNAME:$USERNAME /var/run/docker.sock
-
 RUN mkdir $HOME/.config
-
-RUN chmod 777 $SETUPDIR
 RUN chown -R $USERNAME:$USERNAME $HOME/.config $HOME/.cache/
 
 # ---------------------------------------------------------------------
@@ -130,7 +135,13 @@ FROM usersetup as npminstalls
 
 # CAP installs
 RUN \
-  npm install --global @sap/cds-dk @sap/cds-lsp \
+  npm install --global \
+    @sap/cds-dk \
+    @sap/cds-lsp \
+    jwt-cli \
+    ramda \
+    url-decode-encode-cli \
+    yarn \
   && chown -R $USERNAME:$USERNAME $HOME/.npm/
 
 # ---------------------------------------------------------------------
@@ -166,9 +177,21 @@ RUN \
  && cp tree-sitter-cds/nvim/*.scm $HOME/.config/nvim/queries/cds/
 
 # Set up shell configuration
-RUN ln -s -f $HOME/dotfiles/bashrc $HOME/.bashrc
+RUN \
+    ln -s -f $HOME/dotfiles/bashrc $HOME/.bashrc; \
+    ln -s -f $HOME/dotfiles/gitconfig $HOME/.gitconfig; \
+    ln -s -f $HOME/dotfiles/config/lf/ $HOME/.config/; \
+    ln -s -f $HOME/dotfiles/config/gh/ $HOME/.config/; \
+    ln -s -f $HOME/dotfiles/config/g/ $HOME/.config/;
+
 # ---------------------------------------------------------------------
-FROM coreconfig as finalsetup
+FROM coreconfig as tempinstalls
+
+USER root
+RUN apt-get install -y iputils-ping
+
+# ---------------------------------------------------------------------
+FROM tempinstalls as finalsetup
 
 USER $USERNAME
 WORKDIR /home/$USERNAME
