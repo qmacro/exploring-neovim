@@ -166,7 +166,7 @@ RUN \
     ln -s $HOME/dotfiles/config/nvim/ $HOME/.config/ \
  && nvim --headless -c "Lazy" -c "qa" \
  && nvim --headless -c "TSInstall javascript json jq" -c "qa" \
- && nvim --headless -c "MasonInstall jq-lsp json-lsp lua-language-server typescript-language-server" -c "qa" \
+ && nvim --headless -c "MasonInstall jq-lsp json-lsp lua-language-server typescript-language-server dockerfile-language-server" -c "qa" \
  && chmod -R +w $HOME/go/ && rm -rf $HOME/go/
 
 # Install treesitter query files for CDS
