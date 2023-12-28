@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-declare image="${1:-neovim-tmux-explorations-neovim}"
+declare image="${1:-newdev}"
+# --volume ~/.config:/home/user/.config \
 docker run \
     --platform linux/amd64 \
     --volume ~/work:/home/user/work \
-    --volume ~/.config:/home/user/.config \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
-    --name test \
+    --name devcontainer \
+    --publish "4004:4004" \
+    --publish "8000:8000" \
+    --rm \
     -i \
     -t \
     "$image"
