@@ -1,11 +1,34 @@
-version: "3"
 services:
-  shell:
-    container_name: neovim
+  socat:
+    image: alpine/socat
+    container_name: socat
+    networks:
+      -  devnet
+    command: 'tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock'
+    user: root
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  dev:
+    depends_on:
+      - socat
+    image: newdev
+    container_name: dev
+    networks:
+      -  devnet
     platform: linux/amd64
-    build: .
-    image: exploring-neovim
     stdin_open: true
     tty: true
     volumes:
-    - ./homedir/.config:/root/.config
+      - '$HOME/work:/home/user/work'
+    ports:
+      - '4004:4004'
+      - '8000:8000'
+    environment:
+      DOCKER_HOST: 'socat:2375'
+networks:
+  devnet:
+    name: devnet
+    driver: bridge
+
