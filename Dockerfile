@@ -11,12 +11,14 @@ RUN apt-get install -y \
     build-essential \
     ca-certificates \
     curl \
+    entr \
     fd-find \
     fzf \
     gcc \
     git \
     gnupg \
     golang \
+    iputils-ping \
     lf \
     libevent-dev \
     ncurses-dev \
@@ -24,6 +26,8 @@ RUN apt-get install -y \
     pandoc \
     shellcheck \
     toot \
+    tree \
+    watch \
     unzip
 
 # Ensure keyrings dir is there, for apt-based Docker and Node.js installs
@@ -74,7 +78,7 @@ RUN curl \
     --url "https://github.com/jqlang/jq/releases/download/jq-${JQVER}/jq-linux-amd64" \
     && chmod +x $DEST/jq
 
-ARG IJQVER=0.4.1
+ARG IJQVER=1.0.0
 RUN curl \
     --silent \
     --location \
@@ -93,7 +97,7 @@ RUN cd $SETUPDIR \
   && curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREPVER}/ripgrep_${RIPGREPVER}_amd64.deb \
   && dpkg -i ripgrep_${RIPGREPVER}_amd64.deb
 
-ARG NEOVIMVER=0.9.4
+ARG NEOVIMVER=0.9.5
 RUN curl -L https://github.com/neovim/neovim/releases/download/v${NEOVIMVER}/nvim-linux64.tar.gz \
   | tar xzf - -C /usr --strip-components 1
 
@@ -159,7 +163,7 @@ RUN \
  && ln -s $HOME/dotfiles/config/tmux/tmux.conf $HOME/.config/tmux/ \
  && git clone https://github.com/tmux-plugins/tpm $HOME/.config/tmux/plugins/tpm \
  && $HOME/.config/tmux/plugins/tpm/bin/install_plugins \
- && echo 'Devcontainers FTW!' > $HOME/.focus-status
+ && echo 'The future is terminal' > $HOME/.focus-status
 
 # Basic Neovim config & setup
 RUN \
@@ -185,13 +189,12 @@ RUN \
     ln -s -f $HOME/dotfiles/config/g/ $HOME/.config/;
 
 # ---------------------------------------------------------------------
-FROM coreconfig as tempinstalls
-
+FROM coreconfig as working
 USER root
-RUN apt-get install -y iputils-ping
+RUN apt-get install -y yq
 
 # ---------------------------------------------------------------------
-FROM tempinstalls as finalsetup
+FROM working as finalsetup
 
 USER $USERNAME
 WORKDIR /home/$USERNAME
