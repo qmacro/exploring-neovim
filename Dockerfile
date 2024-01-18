@@ -1,5 +1,6 @@
+# syntax=docker/dockerfile:1
 # ---------------------------------------------------------------------
-FROM --platform=linux/amd64 debian:latest as base
+FROM --platform=linux/amd64 debian:bookworm-20231218 as base
 
 ARG USERNAME=user
 ARG DEST=/usr/local/bin
@@ -8,6 +9,7 @@ ARG SETUPDIR=/tmp/setup
 RUN apt-get update
 RUN apt-get install -y \
     apt-transport-https \
+    bat \
     build-essential \
     ca-certificates \
     curl \
@@ -18,6 +20,7 @@ RUN apt-get install -y \
     git \
     gnupg \
     golang \
+    highlight \
     iputils-ping \
     lf \
     libevent-dev \
@@ -28,7 +31,11 @@ RUN apt-get install -y \
     toot \
     tree \
     watch \
-    unzip
+    unzip \
+    yq
+
+# Need to symlink 'bat' -> 'batcat' in this version of debian
+RUN ln -s /usr/bin/batcat /usr/bin/bat
 
 # Ensure keyrings dir is there, for apt-based Docker and Node.js installs
 RUN mkdir -p /etc/apt/keyrings
@@ -53,6 +60,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
 RUN apt-get update
 RUN apt-get install -y docker-ce-cli nodejs
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove -y
 
 # ---------------------------------------------------------------------
 FROM base as extra
@@ -78,19 +86,19 @@ RUN curl \
     --url "https://github.com/jqlang/jq/releases/download/jq-${JQVER}/jq-linux-amd64" \
     && chmod +x $DEST/jq
 
-ARG IJQVER=1.0.0
-RUN curl \
-    --silent \
-    --location \
-    --url "https://git.sr.ht/~gpanders/ijq/refs/download/v$IJQVER/ijq-$IJQVER-linux-amd64.tar.gz" \
-    | tar \
-      --extract \
-      --gunzip \
-      --file - \
-      --directory $DEST \
-      --strip-components 1 \
-      --wildcards \
-      ijq-$IJQVER/ijq
+#ARG IJQVER=1.0.0
+#RUN curl \
+#    --silent \
+#    --location \
+#    --url "https://git.sr.ht/~gpanders/ijq/refs/download/v$IJQVER/ijq-$IJQVER-linux-amd64.tar.gz" \
+#    | tar \
+#      --extract \
+#      --gunzip \
+#      --file - \
+#      --directory $DEST \
+#      --strip-components 1 \
+#      --wildcards \
+#      ijq-$IJQVER/ijq
 
 ARG RIPGREPVER=13.0.0
 RUN cd $SETUPDIR \
@@ -189,12 +197,7 @@ RUN \
     ln -s -f $HOME/dotfiles/config/g/ $HOME/.config/;
 
 # ---------------------------------------------------------------------
-FROM coreconfig as working
-USER root
-RUN apt-get install -y yq
-
-# ---------------------------------------------------------------------
-FROM working as finalsetup
+FROM coreconfig as finalsetup
 
 USER $USERNAME
 WORKDIR /home/$USERNAME
