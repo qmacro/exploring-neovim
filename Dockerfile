@@ -86,19 +86,19 @@ RUN curl \
     --url "https://github.com/jqlang/jq/releases/download/jq-${JQVER}/jq-linux-amd64" \
     && chmod +x $DEST/jq
 
-#ARG IJQVER=1.0.0
-#RUN curl \
-#    --silent \
-#    --location \
-#    --url "https://git.sr.ht/~gpanders/ijq/refs/download/v$IJQVER/ijq-$IJQVER-linux-amd64.tar.gz" \
-#    | tar \
-#      --extract \
-#      --gunzip \
-#      --file - \
-#      --directory $DEST \
-#      --strip-components 1 \
-#      --wildcards \
-#      ijq-$IJQVER/ijq
+ARG IJQVER=1.0.0
+RUN curl \
+    --silent \
+    --location \
+    --url "https://git.sr.ht/~gpanders/ijq/refs/download/v$IJQVER/ijq-$IJQVER-linux-amd64.tar.gz" \
+    | tar \
+      --extract \
+      --gunzip \
+      --file - \
+      --directory $DEST \
+      --strip-components 1 \
+      --wildcards \
+      ijq-$IJQVER/ijq
 
 ARG RIPGREPVER=13.0.0
 RUN cd $SETUPDIR \

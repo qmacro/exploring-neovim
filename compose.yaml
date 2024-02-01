@@ -24,7 +24,7 @@ services:
     volumes:
       - '$HOME/work:/home/user/work'
     ports:
-      - '4004:4004'
+      - '4444:4004'
       - '8000:8000'
     environment:
       DOCKER_HOST: 'socat:2375'
